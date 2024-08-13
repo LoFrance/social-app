@@ -16,17 +16,17 @@ import { Config } from '@lfapp/backend/src/utils/config'
 const securityMiddleware = (app: Application, config: Config): void => {
   app.use(
     cookieSession({
-      name: process.env.SESSION_NAME || 'session',
-      keys: ['test1', 'test2'],
+      name: config.server.sessionName,
+      keys: [config.server.secretKeyOne, config.server.secretKeyTwo],
       maxAge: config.cookie.maxAge,
-      secure: config.cookie.isSecure || false,
+      secure: config.cookie.isSecure,
     }),
   )
   app.use(hpp())
   app.use(helmet())
   app.use(
     cors({
-      origin: '*',
+      origin: config.server.clientURL,
       credentials: true,
       optionsSuccessStatus: 200, // for old browser
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
