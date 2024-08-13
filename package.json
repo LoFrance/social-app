@@ -1,0 +1,14 @@
+{
+  "name": "social-app",
+  "main": "index.js",
+  "scripts": {
+    "dev-backend": "npm run dev --workspace=@lfapp/backend"
+  },
+  "author": "Lorenzo Franceschini <l.franceschini@gmail.com>",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "infrastructure",
+    "packages/**"
+  ]
+}
