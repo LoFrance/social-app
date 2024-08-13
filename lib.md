@@ -15,3 +15,8 @@ npm install --save-dev tsx --workspace=backend
 npm i mongoose --workspace=backend
 
 npm install zod-validation-error --workspace=backend
+
+npm i --save-dev eslint @eslint/js @types/eslint__js typescript typescript-eslint --workspace=backend
+
+npm i --save-dev prettier --workspace=backend
+

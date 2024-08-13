@@ -2,7 +2,8 @@
   "name": "social-app",
   "main": "index.js",
   "scripts": {
-    "dev-backend": "npm run dev --workspace=@lfapp/backend"
+    "dev-backend": "npm run dev --workspace=@lfapp/backend",
+    "lint-backend": "npm run lint --workspace=@lfapp/backend"
   },
   "author": "Lorenzo Franceschini <l.franceschini@gmail.com>",
   "workspaces": [
