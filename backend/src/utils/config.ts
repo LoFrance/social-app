@@ -1,11 +1,17 @@
-import { z } from "zod";
-import { fromError } from 'zod-validation-error';
+import { z } from 'zod'
+import { fromError } from 'zod-validation-error'
+import dotenv from 'dotenv'
+
+dotenv.config({})
 
 const ServerEnvSchema = z.object({
-  port: z.number().refine(val => val > 1024, {message: "Port must be over 1024"})
-});
-type Server = z.infer<typeof ServerEnvSchema>;
-
+  port: z.number().refine((val) => val > 1024, { message: 'Port must be over 1024' }),
+  secretKeyOne: z.string(),
+  secretKeyTwo: z.string(),
+  sessionName: z.string(),
+  clientURL: z.string(),
+})
+type Server = z.infer<typeof ServerEnvSchema>
 
 const CookieEnvSchema = z.object({
   maxAge: z.number(),
@@ -15,37 +21,40 @@ type Cookie = z.infer<typeof CookieEnvSchema>
 
 const MongoDbEnvSchema = z.object({
   host: z.string(),
-  port: z.number().refine(val => val > 1024, {message: "Port must be over 1024"}),
-  dbname: z.string()
-});
-type Mongo = z.infer<typeof MongoDbEnvSchema>;
-
+  port: z.number().refine((val) => val > 1024, { message: 'Port must be over 1024' }),
+  dbname: z.string(),
+})
+type Mongo = z.infer<typeof MongoDbEnvSchema>
 
 export type Config = { cookie: Cookie; server: Server; mongodb: Mongo }
 
 const printZodError = (error: unknown) => {
   if (error instanceof z.ZodError) {
     // console.error("Validation failed: ", error.issues[0]);
-    const validationError = fromError(error);
+    const validationError = fromError(error)
 
-    console.error(validationError.toString());
+    console.error(validationError.toString())
     // or return it as an actual error
-    return validationError;
+    return validationError
   } else {
-    console.error("Unexpected error: ", error);
-    return error;
+    console.error('Unexpected error: ', error)
+    return error
   }
 }
 
 const getServeValue = () =>
   ServerEnvSchema.parse({
     port: parseInt(z.string().parse(process.env.PORT || 3000), 10),
+    secretKeyOne: z.string().parse(process.env.SECRET_KEY_ONE),
+    secretKeyTwo: z.string().parse(process.env.SECRET_KEY_TWO),
+    sessionName: z.string().parse(process.env.SESSION_NAME),
+    clientURL: z.string().parse(process.env.CLIENT_URL),
   })
 
 const getCookieValue = () =>
   CookieEnvSchema.parse({
     maxAge: parseInt(z.string().parse(process.env.MAX_AGE), 10),
-    isSecure: z.boolean().parse(Boolean(process.env.SESSION_IS_SECURE?.toLocaleLowerCase())),
+    isSecure: process.env.NODE_ENV !== 'development',
   })
 
 const getMongoDbValue = () =>
@@ -66,8 +75,8 @@ const getEnvVars = <T extends FunctionEnvReturn>(f: T) => {
       ...f(),
     } as ReturnType<T>
   } catch (error) {
-      printZodError(error);
-      throw error;
+    printZodError(error)
+    throw error
   }
 }
 
