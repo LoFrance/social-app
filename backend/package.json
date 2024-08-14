@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/app.ts | ../node_modules/.bin/bunyan",
     "docker-mongo": "docker-compose -f docker-compose.yml up",
-    "lint": "eslint ."
+    "lint": "eslint 'src/**/*.ts'",
+    "lint:fix": "eslint 'src/**/*.ts' --fix"
   },
   "keywords": [],
   "author": "",
