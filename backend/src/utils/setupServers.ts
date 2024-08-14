@@ -13,6 +13,7 @@ import HTTP_STATUS from 'http-status-codes'
 import 'express-async-errors'
 import { Config } from '@lfapp/backend/src/utils/config'
 import applicationRoutes from '../routes'
+import { IErrorResponse, isCustomError, NotFoundError } from '@lfapp/shared-globals-handlers'
 
 const securityMiddleware = (app: Application, config: Config): void => {
   app.use(
@@ -21,7 +22,7 @@ const securityMiddleware = (app: Application, config: Config): void => {
       keys: [config.server.secretKeyOne, config.server.secretKeyTwo],
       maxAge: config.cookie.maxAge,
       secure: config.cookie.isSecure,
-    }),
+    })
   )
   app.use(hpp())
   app.use(helmet())
@@ -31,7 +32,7 @@ const securityMiddleware = (app: Application, config: Config): void => {
       credentials: true,
       optionsSuccessStatus: 200, // for old browser
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    }),
+    })
   )
 }
 
@@ -40,21 +41,37 @@ const standardMiddleware = (app: Application) => {
   app.use(
     json({
       limit: '50mb',
-    }),
+    })
   )
   app.use(
     urlencoded({
       extended: true,
       limit: '50mb',
-    }),
+    })
   )
 }
 
 const routeMiddleware = (app: Application) => {
-  applicationRoutes(app);
+  applicationRoutes(app)
 }
 
-const globalErrorHandler = (app: Application) => {}
+const globalErrorHandler = (app: Application) => {
+  // Catch errors for URL non available
+  app.all('*', (req: Request, res: Response) => {
+    console.error(`Request URL '${req.originalUrl}' not found`)
+    throw NotFoundError(`Request URL '${req.originalUrl}' not found`)
+  })
+
+  // Custom Error
+  app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
+    console.error(`Catched error: ${JSON.stringify(error)}`)
+    if (isCustomError(error)) {
+      console.error('Is a Custom Error ;)')
+      res.status(error.statusCode).json(error.serializeErrors())
+    }
+    next()
+  })
+}
 
 const startHttpServer = (app: Application, config: Config): void => {
   try {

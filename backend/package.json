@@ -27,6 +27,7 @@
     "zod": "^3.23.8"
   },
   "dependencies": {
+    "@lfapp/shared-globals-handlers": "*",
     "compression": "^1.7.4",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",

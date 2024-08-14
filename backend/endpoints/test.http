@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:5005
+
+@basePath = api/v1
+
+GET {{baseUrl}}/{{basePath}}/test?check=true HTTP/1.1

@@ -1,0 +1,4 @@
+{
+  "name": "@lfapp/shared-globals-handlers",
+  "main": "./src/index.ts"
+}
