@@ -20,3 +20,6 @@ npm i --save-dev eslint @eslint/js @types/eslint__js typescript typescript-eslin
 
 npm i --save-dev prettier --workspace=backend
 
+npm i bunyan --workspace=backend
+
+npm i --save-dev @types/bunyan --workspace=backend

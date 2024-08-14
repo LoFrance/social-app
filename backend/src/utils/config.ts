@@ -1,8 +1,21 @@
 import { z } from 'zod'
 import { fromError } from 'zod-validation-error'
 import dotenv from 'dotenv'
+import bunyan from 'bunyan'
+import Logger from 'bunyan'
 
 dotenv.config({})
+
+// Logger
+
+export const createLogger = (name: string) => {
+  return bunyan.createLogger({
+    name,
+    level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+  })
+}
+
+const log: Logger = createLogger('routesLogger')
 
 const ServerEnvSchema = z.object({
   port: z.number().refine((val) => val > 1024, { message: 'Port must be over 1024' }),
@@ -30,14 +43,14 @@ export type Config = { cookie: Cookie; server: Server; mongodb: Mongo }
 
 const printZodError = (error: unknown) => {
   if (error instanceof z.ZodError) {
-    // console.error("Validation failed: ", error.issues[0]);
+    // log.error("Validation failed: ", error.issues[0]);
     const validationError = fromError(error)
 
-    console.error(validationError.toString())
+    log.error(validationError.toString())
     // or return it as an actual error
     return validationError
   } else {
-    console.error('Unexpected error: ', error)
+    log.error('Unexpected error: ', error)
     return error
   }
 }

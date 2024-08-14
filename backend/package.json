@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "tsx watch src/app.ts",
+    "dev": "tsx watch src/app.ts | ../node_modules/.bin/bunyan",
     "docker-mongo": "docker-compose -f docker-compose.yml up",
     "lint": "eslint ."
   },
@@ -13,6 +13,7 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.9.0",
+    "@types/bunyan": "^1.8.11",
     "@types/compression": "^1.7.5",
     "@types/cookie-session": "^2.0.49",
     "@types/cors": "^2.8.17",
@@ -28,6 +29,7 @@
   },
   "dependencies": {
     "@lfapp/shared-globals-handlers": "*",
+    "bunyan": "^1.8.15",
     "compression": "^1.7.4",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
