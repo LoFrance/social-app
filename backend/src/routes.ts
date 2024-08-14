@@ -1,5 +1,9 @@
 import { BadRequestError } from '@lfapp/shared-globals-handlers'
 import express, { Application } from 'express'
+import Logger from 'bunyan'
+import { createLogger } from './utils/config'
+
+const log: Logger = createLogger('routesLogger')
 
 const router = express.Router()
 const BASE_PATH = '/api/v1'
@@ -7,7 +11,7 @@ const BASE_PATH = '/api/v1'
 // dall'esempio della guida di Express
 router.use(function timeLog(_req, _res, next) {
   const currentDate = new Date()
-  console.log(
+  log.info(
     `Ricevuta chiamata :: ${currentDate.getDay()}/${currentDate.getMonth()}/${currentDate.getFullYear()} ${currentDate.getHours()}:${currentDate.getMinutes()}:${currentDate.getSeconds()}`
   )
   next()

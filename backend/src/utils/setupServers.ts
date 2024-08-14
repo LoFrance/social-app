@@ -11,9 +11,12 @@ import compression from 'compression'
 import cookieSession from 'cookie-session'
 import HTTP_STATUS from 'http-status-codes'
 import 'express-async-errors'
-import { Config } from '@lfapp/backend/src/utils/config'
+import { Config, createLogger } from '@lfapp/backend/src/utils/config'
 import applicationRoutes from '../routes'
 import { IErrorResponse, isCustomError, NotFoundError } from '@lfapp/shared-globals-handlers'
+import Logger from 'bunyan';
+
+const log: Logger = createLogger('setupServerLogger');
 
 const securityMiddleware = (app: Application, config: Config): void => {
   app.use(
@@ -58,15 +61,15 @@ const routeMiddleware = (app: Application) => {
 const globalErrorHandler = (app: Application) => {
   // Catch errors for URL non available
   app.all('*', (req: Request, res: Response) => {
-    console.error(`Request URL '${req.originalUrl}' not found`)
+    log.error(`Request URL '${req.originalUrl}' not found`)
     throw NotFoundError(`Request URL '${req.originalUrl}' not found`)
   })
 
   // Custom Error
   app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
-    console.error(`Catched error: ${JSON.stringify(error)}`)
+    log.error(`Catched error: ${JSON.stringify(error)}`)
     if (isCustomError(error)) {
-      console.error('Is a Custom Error ;)')
+      log.error('Is a Custom Error ;)')
       res.status(error.statusCode).json(error.serializeErrors())
     }
     next()
@@ -78,7 +81,7 @@ const startHttpServer = (app: Application, config: Config): void => {
     const httpServer: http.Server = new http.Server(app)
     createHttpServer(httpServer, config)
   } catch (error) {
-    console.log(error)
+    log.error(error)
   }
 }
 
@@ -95,7 +98,7 @@ const createSocketIO = (httpServer: http.Server) => {}
 const createHttpServer = (httpServer: http.Server, config: Config) => {
   const PORT = config.server.port || 5000
   httpServer.listen(PORT, () => {
-    console.log(`Server Running ${PORT}`)
+    log.info(`Server Running ${PORT}`)
   })
 }
 
