@@ -12,6 +12,7 @@ import cookieSession from 'cookie-session'
 import HTTP_STATUS from 'http-status-codes'
 import 'express-async-errors'
 import { Config } from '@lfapp/backend/src/utils/config'
+import applicationRoutes from '../routes'
 
 const securityMiddleware = (app: Application, config: Config): void => {
   app.use(
@@ -49,7 +50,9 @@ const standardMiddleware = (app: Application) => {
   )
 }
 
-const routeMiddleware = (app: Application) => {}
+const routeMiddleware = (app: Application) => {
+  applicationRoutes(app);
+}
 
 const globalErrorHandler = (app: Application) => {}
 
