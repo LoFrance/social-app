@@ -4,10 +4,12 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "build": "tspc -p .",
     "dev": "tsx watch src/app.ts | ../node_modules/.bin/bunyan",
     "docker-mongo": "docker-compose -f docker-compose.yml up",
     "lint": "eslint 'src/**/*.ts'",
-    "lint:fix": "eslint 'src/**/*.ts' --fix"
+    "lint:fix": "eslint 'src/**/*.ts' --fix",
+    "start": "ts-node ./build/app.js"
   },
   "keywords": [],
   "author": "",
@@ -23,9 +25,11 @@
     "@types/hpp": "^0.2.6",
     "eslint": "^9.9.0",
     "prettier": "^3.3.3",
+    "ts-patch": "^3.2.1",
     "tsx": "^4.17.0",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.1.0",
+    "typescript-transform-paths": "^3.4.10",
     "zod": "^3.23.8"
   },
   "dependencies": {
