@@ -11,8 +11,8 @@ import compression from 'compression'
 import cookieSession from 'cookie-session'
 import HTTP_STATUS from 'http-status-codes'
 import 'express-async-errors'
-import { Config, createLogger } from '@lfapp/backend/src/utils/config'
-import applicationRoutes from '../routes'
+import { Config, createLogger } from '@root/utils/config'
+import applicationRoutes from '@root/routes'
 import { IErrorResponse, isCustomError, NotFoundError } from '@lfapp/shared-globals-handlers'
 import Logger from 'bunyan';
 
