@@ -29,3 +29,5 @@ npm i -D ts-patch --workspace=backend
 npm i -D typescript-transform-paths --workspace=backend
 
 npm i cloudinary --workspace=backend
+
+npm i joi --workspace=backend
