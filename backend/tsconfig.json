@@ -28,6 +28,7 @@
     "strictPropertyInitialization": false,
     "typeRoots": ["../node_modules/@types"],
     "paths": {
+      "@auth/*": ["src/features/auth/*"],
       "@root/*": ["src/*"]
     },
     "plugins": [
