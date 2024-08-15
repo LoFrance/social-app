@@ -35,3 +35,9 @@ npm i joi --workspace=backend
 npm i bcryptjs --workspace=backend
 
 npm i -D @types/bcryptjs --workspace=backend
+
+npm i jsonwebtoken --workspace=backend
+
+npm i -D @types/jsonwebtoken --workspace=backend
+
+npm i redis --workspace=backend

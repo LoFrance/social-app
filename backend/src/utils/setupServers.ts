@@ -69,7 +69,7 @@ const globalErrorHandler = (app: Application) => {
   app.use((error: IErrorResponse, _req: Request, res: Response, next: NextFunction) => {
     log.error(`Catched error: ${JSON.stringify(error)}`)
     if (isCustomError(error)) {
-      log.error('Is a Custom Error ;)')
+      log.error(`Is a Custom Error ;) ${JSON.stringify(error.serializeErrors())}`)
       res.status(error.statusCode).json(error.serializeErrors())
     }
     next()

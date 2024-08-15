@@ -8,7 +8,9 @@ export default (config: Config) => {
   const connect = () => {
     log.info(`Trying to connect to ${config.mongodb.host} on ${config.mongodb.dbname}`)
     mongoose
-      .connect(`mongodb://${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.dbname}`)
+      .connect(
+        `${config.mongodb.protocol}://${config.mongodb.username}:${config.mongodb.password}@${config.mongodb.host}:${config.mongodb.port}/${config.mongodb.dbname}`
+      )
       .then(() => {
         log.info(`Successfully connected to database ${config.mongodb.dbname}`)
       })
