@@ -27,3 +27,5 @@ npm i --save-dev @types/bunyan --workspace=backend
 npm i -D ts-patch --workspace=backend
 
 npm i -D typescript-transform-paths --workspace=backend
+
+npm i cloudinary --workspace=backend

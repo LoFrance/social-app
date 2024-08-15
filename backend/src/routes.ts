@@ -1,7 +1,7 @@
 import { BadRequestError } from '@lfapp/shared-globals-handlers'
 import express, { Application } from 'express'
 import Logger from 'bunyan'
-import { createLogger } from './utils/config'
+import { createLogger } from './utils/config/config'
 
 const log: Logger = createLogger('routesLogger')
 

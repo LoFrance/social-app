@@ -1,4 +1,14 @@
 services:
+  redis:
+    image: docker.io/bitnami/redis:7.4
+    environment:
+      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis-data:/bitnami/redis/data'
   mongodb:
     image: mongo:latest
     container_name: mongodb
@@ -9,13 +19,15 @@ services:
     env_file:
       - .env
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "admin"
-      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_INITDB_ROOT_USERNAME: 'admin'
+      MONGO_INITDB_ROOT_PASSWORD: 'password'
     ports:
-      - "27017:27017"
+      - '27017:27017'
     networks:
       - mongodb_network
 volumes:
+  redis-data:
+    driver: local
   mongodb-data:
     driver: local
     name: mongo-data
