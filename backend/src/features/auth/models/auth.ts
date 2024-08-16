@@ -1,6 +1,7 @@
 import { compare, hash } from 'bcryptjs'
 import { IAuthDocument } from '@auth/interfaces/auth'
 import { model, Model, Schema } from 'mongoose'
+import { ServerError } from '@lfapp/shared-globals-handlers'
 
 const SALT_ROUND = 10 // For hashing password
 
@@ -29,9 +30,13 @@ const authSchema: Schema = new Schema(
 
 // Hooks: Pre-Save - we hashing password before save document
 authSchema.pre('save', async function (this: IAuthDocument, next: () => void) {
-  const hashedPassword: string = await hash(this.password as string, SALT_ROUND)
-  this.password = hashedPassword
-  next()
+  try {
+    const hashedPassword: string = await hash(this.password as string, SALT_ROUND)
+    this.password = hashedPassword
+    next()
+  } catch (e) {
+    throw ServerError(`Bcrypt error: ${JSON.stringify(e)}`)
+  }
 })
 
 // Methods

@@ -58,12 +58,17 @@ export const saveUserToRedis =
       if (!client.isOpen) {
         await client.connect()
       }
-      await client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` })
-      for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
-        await client.HSET(`users:${key}`, `${itemKey}`, `${itemValue}`)
+      if (key) {
+        log.warn(key)
+        await client.ZADD('user', { score: parseInt(userUId, 10), value: `${key}` })
+        // for (const [itemKey, itemValue] of Object.entries(dataToSave)) {
+        //   await client.HSET(`users:${key}`, `${itemKey}`, `${itemValue}`)
+        // }
+        // const obj: Record<string, string | number> = { a: 'a', n: 1 }
+        await client.hSet(`users:${key}`, [...Object.entries(dataToSave).flat()])
       }
     } catch (error) {
-      log.error(error)
+      log.error(`${error} with ${key}`)
       throw ServerError('Server error. Try again.')
     }
   }
