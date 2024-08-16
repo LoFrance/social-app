@@ -1,10 +1,10 @@
 import express, { Express } from 'express'
-import { getServer } from '@root/utils/setupServers'
-import { createLogger, getConfigOrThrow } from '@root/utils/config/config'
-import databaseConnection from '@root/utils/setupDatabase'
+import { getServer } from '@utils/setupServers'
+import { createLogger, getConfigOrThrow } from '@config/config'
+import databaseConnection from '@utils/setupDatabase'
 import Logger from 'bunyan'
-import { setCloudinaryConfig } from './utils/config/cloudinaryConfig'
-import { getRedisClient } from './services/redis/client'
+import { setCloudinaryConfig } from '@config/cloudinaryConfig'
+import { getRedisClient } from '@services/redis/client'
 
 const log: Logger = createLogger('appLogger')
 
@@ -23,6 +23,8 @@ const app = async () => {
     const redisClient = getRedisClient(config.redis.host)
     const res = await redisClient.ping()
     log.info(`Ping: Redis reply with ${res}`)
+    await redisClient.disconnect()
+
     setCloudinaryConfig({
       cloud_name: config.cloudinary.cloud_name,
       api_key: config.cloudinary.app_key,

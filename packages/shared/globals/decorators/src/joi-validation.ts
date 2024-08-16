@@ -1,8 +1,8 @@
 import { JoiRequestValidationError, GenericError, BadRequestError } from '@lfapp/shared-globals-handlers'
 import { Request } from 'express'
 import { ObjectSchema, ValidationResult, ValidationError } from 'joi'
-
 type JoiDecorator = (target: any, key: string, descriptor: PropertyDescriptor) => void;
+
 
 export function joiValidation(schema: ObjectSchema): JoiDecorator {
   return (_target: any, _key: string, descriptor: PropertyDescriptor) => {
@@ -26,7 +26,7 @@ export const joiMethodValidation = (schema: ObjectSchema): (...args: any[]) => P
   return async (...args: any[]) => {
     if(!args) throw GenericError('No request received')
     const req: Request = args[0];
-    console.log('BODY', req.body)
+
     if(!req.body || !Object.keys(req.body).length) throw BadRequestError('No body received')
 
     const validation = schema.validate(req.body)

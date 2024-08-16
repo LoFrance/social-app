@@ -29,7 +29,10 @@
     "typeRoots": ["../node_modules/@types"],
     "paths": {
       "@auth/*": ["src/features/auth/*"],
+      "@config/*": ["src/utils/config/*"],
+      "@services/*": ["src/services/*"],
       "@user/*": ["src/features/user/*"],
+      "@utils/*": ["src/utils/*"],
       "@root/*": ["src/*"]
     },
     "plugins": [

@@ -1,5 +1,6 @@
 import { Document } from 'mongoose'
 import { ObjectId } from 'mongodb'
+import { IUserDocument } from '@user/interfaces/user'
 
 // Create a new reporty inside an exist namespace, we add currentUser property in Express Request
 declare module 'express' {
@@ -41,6 +42,7 @@ export interface ISignUpData {
   avatarColor: string
 }
 
+// interface for Queue Auth
 export interface IAuthJob {
-  value?: string | IAuthDocument
+  value?: string | IAuthDocument | IUserDocument
 }
