@@ -8,7 +8,7 @@ import { getRedisClient } from '@services/redis/client'
 
 const log: Logger = createLogger('appLogger')
 
-const config = getConfigOrThrow()
+const config = getConfigOrThrow() // The first time use getConfigOrThrow, otherwise use getConfig
 
 const app = async () => {
   try {

@@ -21,7 +21,7 @@ import { IUserDocument } from '@user/interfaces/user'
 import { getConfigOrThrow } from '@config/config'
 import { authQueue } from '@services/queues/auth'
 import { userQueue } from '@services/queues/user'
-import jwt from 'jsonwebtoken'
+import { signupToken } from '@root/shared/jwt'
 
 const config = getConfigOrThrow()
 if (config instanceof Error) {
@@ -30,6 +30,8 @@ if (config instanceof Error) {
 
 const userData = (data: IAuthDocument, userObjectId: ObjectId): IUserDocument => {
   const { _id, username, email, uId, password, avatarColor } = data
+  console.log('ID per USER che punta ad AuthId', _id)
+  console.log('ID per USER', ObjectId)
   return {
     _id: userObjectId,
     authId: _id,
@@ -65,8 +67,9 @@ const userData = (data: IAuthDocument, userObjectId: ObjectId): IUserDocument =>
   } as unknown as IUserDocument
 }
 
-const signupData = (data: ISignUpData): IAuthDocument => {
+const signupAuthData = (data: ISignUpData): IAuthDocument => {
   const { _id, username, email, uId, password, avatarColor } = data
+  console.log('ID per Auth', _id)
   return {
     _id,
     username: firstLetterUpperCase(username),
@@ -76,19 +79,6 @@ const signupData = (data: ISignUpData): IAuthDocument => {
     avatarColor,
     createdAt: new Date(),
   } as IAuthDocument
-}
-
-const signupToken = (data: IAuthDocument, userObjectId: ObjectId): string => {
-  return jwt.sign(
-    {
-      userId: userObjectId,
-      uId: data.uId,
-      email: data.email,
-      username: data.username,
-      avatarColor: data.avatarColor,
-    },
-    config.server.JWT_TOKEN
-  )
 }
 
 export const signUp = () => {
@@ -107,8 +97,11 @@ export const signUp = () => {
 
     const authObjectId: ObjectId = new ObjectId()
     const userObjectId: ObjectId = new ObjectId()
+    console.log('authObjectId', authObjectId)
+    console.log('userObjectId', userObjectId)
     const uId = `${generateRandomUUIDs()}`
-    const authData: IAuthDocument = signupData({
+    console.log('Ora ', authObjectId)
+    const authData: IAuthDocument = signupAuthData({
       _id: authObjectId,
       uId,
       username,
@@ -137,21 +130,21 @@ export const signUp = () => {
 
       // Add to Database
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const omit = (o: any, ...paths: any[]) =>
-        Object.fromEntries(Object.entries(o).filter(([k]) => !paths.includes(k)))
-      const authJobData = omit(userDataForRedis, [
-        'uId',
-        'username',
-        'email',
-        'avatarColor',
-        'password',
-      ]) as unknown as IUserDocument
+      // const omit = (o: any, ...paths: any[]) =>
+      //   Object.fromEntries(Object.entries(o).filter(([k]) => !paths.includes(k)))
+      // const authJobData = omit(userDataForRedis, [
+      //   'uId',
+      //   'username',
+      //   'email',
+      //   'avatarColor',
+      //   'password',
+      // ]) as unknown as IUserDocument
 
       // Passing the Process Job Name and the Value
-      authQueue().addAuthJob('addAuthUserToDB', { value: authJobData })
-      userQueue().addUserJob('addUserToDB', { value: authJobData })
+      authQueue().addAuthJob('addAuthUserToDB', { value: authData })
+      userQueue().addUserJob('addUserToDB', { value: userDataForRedis })
 
-      const userJwt: string = signupToken(authData, userObjectId)
+      const userJwt: string = signupToken<IAuthDocument>(authData, userObjectId)
       req.session = { jwt: userJwt }
 
       res.status(HTTP_STATUS.CREATED).json({

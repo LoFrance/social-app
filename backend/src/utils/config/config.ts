@@ -80,3 +80,13 @@ export const getConfigOrThrow = (): Error | Config => {
     return Error(`Invalid Configuration - check you env file ${e}`)
   }
 }
+
+export const getConfig = (): Config => {
+  return {
+    cookie: getEnvVars(getCookieValue),
+    server: getEnvVars(getServeValue),
+    mongodb: getEnvVars(getMongoDbValue),
+    redis: getEnvVars(getRedisValue),
+    cloudinary: getEnvVars(getCloudinaryValue),
+  }
+}

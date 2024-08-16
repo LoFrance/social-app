@@ -44,6 +44,17 @@ const standardMiddleware = (app: Application) => {
   app.use(
     json({
       limit: '50mb',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      verify: function (req: Request & { rawBody: any }, res: Response, buffer) {
+        req.rawBody = buffer
+        try {
+          JSON.parse(req.rawBody)
+        } catch (e) {
+          res.status(HTTP_STATUS.BAD_REQUEST).json({
+            message: 'Please verify your JSON',
+          })
+        }
+      },
     })
   )
   app.use(
@@ -60,7 +71,7 @@ const routeMiddleware = (app: Application) => {
 
 const globalErrorHandler = (app: Application) => {
   // Catch errors for URL non available
-  app.all('*', (req: Request, res: Response) => {
+  app.all('*', (req: Request, _res: Response) => {
     log.error(`Request URL '${req.originalUrl}' not found`)
     throw NotFoundError(`Request URL '${req.originalUrl}' not found`)
   })
@@ -71,6 +82,8 @@ const globalErrorHandler = (app: Application) => {
     if (isCustomError(error)) {
       log.error(`Is a Custom Error ;) ${JSON.stringify(error.serializeErrors())}`)
       res.status(error.statusCode).json(error.serializeErrors())
+    } else {
+      log.warn('Not a custom error')
     }
     next()
   })
