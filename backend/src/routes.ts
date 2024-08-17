@@ -2,6 +2,9 @@ import { BadRequestError } from '@lfapp/shared-globals-handlers'
 import express, { Application } from 'express'
 import Logger from 'bunyan'
 import { createLogger } from './utils/config/config'
+import { authRoutes } from '@auth/routes/auth'
+import { getQueue } from '@services/queues/queue'
+// import { authQueue } from '@services/queues/auth'
 
 const log: Logger = createLogger('routesLogger')
 
@@ -27,7 +30,10 @@ router.get('/test', (req, res) => {
 
 export default (app: Application) => {
   const routes = () => {
+    // authQueue()
+    app.use('/queues', getQueue().getRouter()) //http://localhost:<PORT>/queues
     app.use(BASE_PATH, router)
+    app.use(BASE_PATH, authRoutes().routes())
   }
   routes()
 }

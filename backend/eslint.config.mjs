@@ -13,10 +13,19 @@ export default tseslint.config(eslint.configs.recommended, ...tseslint.configs.r
   rules: {
     // ..other rules,
     'sort-imports': [
-      'error',
+      'warn',
       {
         ignoreCase: true,
         ignoreDeclarationSort: true,
+      },
+    ],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn', // or "error"
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
       },
     ],
   },

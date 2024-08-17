@@ -6,6 +6,7 @@ const ServerEnvSchema = z.object({
   secretKeyTwo: z.string(),
   sessionName: z.string(),
   clientURL: z.string(),
+  JWT_TOKEN: z.string()
 })
 export type Server = z.infer<typeof ServerEnvSchema>
 
@@ -16,4 +17,5 @@ export const getServeValue = () =>
     secretKeyTwo: z.string().parse(process.env.SECRET_KEY_TWO),
     sessionName: z.string().parse(process.env.SESSION_NAME),
     clientURL: z.string().parse(process.env.CLIENT_URL),
+    JWT_TOKEN: z.string().parse(process.env.JWT_TOKEN),
   })
