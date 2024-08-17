@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:5005
+
+@basePath = api/v1
+
+POST {{baseUrl}}/{{basePath}}/signin
+Content-Type: application/json
+Accept: application/json
+withCredential: true
+
+{
+  "username": "Law782",
+  "password": "password"
+}

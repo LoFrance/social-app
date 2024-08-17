@@ -24,8 +24,28 @@ npm i bunyan --workspace=backend
 
 npm i --save-dev @types/bunyan --workspace=backend
 
+npm install bull --save --workspace=backend
+
+npm install @types/bull --save-dev --workspace=backend (non installare!!!)
+
+npm i @bull-board/express @bull-board/ui --workspace=backend
+
 npm i -D ts-patch --workspace=backend
 
 npm i -D typescript-transform-paths --workspace=backend
 
 npm i cloudinary --workspace=backend
+
+npm i joi --workspace=backend
+
+npm i bcryptjs --workspace=backend
+
+npm i -D @types/bcryptjs --workspace=backend
+
+npm i jsonwebtoken --workspace=backend
+
+npm i -D @types/jsonwebtoken --workspace=backend
+
+npm i redis --workspace=backend
+
+npm install -g redis-commander (per avere il comando redis-commander)

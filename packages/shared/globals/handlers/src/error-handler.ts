@@ -36,4 +36,21 @@ export const NotFoundError = (message: string) => {
   throw CustomError(message, statusCode, status);
 }
 
+export const ServerError = (message: string) => {
+  const statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
+  const status = 'error'
+  throw CustomError(message, statusCode, status);
+}
+
+export const GenericError = (message: string) => {
+  const statusCode = HTTP_STATUS.INTERNAL_SERVER_ERROR;
+  const status = 'error'
+  throw CustomError(message, statusCode, status);
+}
+
+export const JoiRequestValidationError = (message: string) => {
+  const statusCode = HTTP_STATUS.BAD_REQUEST
+  const status = 'error'
+  throw CustomError(message, statusCode, status);
+}
 
